@@ -1,4 +1,7 @@
 import express from 'express';
+import * as dotenv from "dotenv";
+dotenv.config();
+const ormconfig = require("./ormconfig");
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import cookieParser from 'cookie-parser';
@@ -25,7 +28,7 @@ const main = async () => {
         console.log('Now browse to http://localhost:4000' + server.graphqlPath);
     });
 };
-createConnection().then(() => {
+createConnection(ormconfig).then(() => {
   console.log('Database Connected')
   main()
 }).catch((e) => console.log(e))

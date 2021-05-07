@@ -8,7 +8,7 @@ export const isAuth: MiddlewareFn<MyContext> = async ( {context}, next) => {
     if (context.req.cookies.token) {
 
         const jwtToken = context.req.cookies.token;
-        const decoded = jwt.verify(jwtToken, "secert") as any
+        const decoded = jwt.verify(jwtToken, ""+process.env.jwtSecret) as any
 
         const user = await User.findOne({ where: { _id: decoded._id, password: decoded._password } })
         if (user) {
