@@ -4,7 +4,7 @@ import { User } from "./Users";
 
 @ObjectType()
 @Entity()
-export class Posts extends BaseEntity{
+export class Post extends BaseEntity{
   @Field(() => ID)
   @PrimaryGeneratedColumn()
   _id: number;
@@ -13,8 +13,7 @@ export class Posts extends BaseEntity{
   @Column()
   title: string;
 
-  @Field(() => User)
-  @ManyToOne(() => User, user => user.posts)
+  @ManyToOne(() => User, (user) => user.posts)
   by: User;
 
 }

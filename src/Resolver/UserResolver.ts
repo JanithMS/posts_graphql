@@ -14,7 +14,7 @@ export class UserResolver{
     // }
 
     @Mutation(() => User)
-    async addUser(@Arg("data") newUser: NewUserInput, @Ctx() {res} : MyContext) : Promise<User> {
+    async register(@Arg("data") newUser: NewUserInput, @Ctx() {res} : MyContext) : Promise<User> {
 
         newUser.password = await bcrypt.hash(newUser.password, 16)
         const user = await User.create(newUser).save()
@@ -34,7 +34,7 @@ export class UserResolver{
         const checkPass = await bcrypt.compare(password, user?.password)
         if(!checkPass) throw new Error("Invalid Credential");
 
-        const jwt = jwtToken(user._id, password)
+        const jwt = jwtToken(user._id, user.password)
         res.cookie("token", jwt, {httpOnly:true, maxAge:1000*60*60*24*3 })
 
         return user;
