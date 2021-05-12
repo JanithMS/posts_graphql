@@ -1,11 +1,11 @@
-import { Arg, Ctx, Mutation, Query, Resolver, UseMiddleware } from "type-graphql";
+import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root, UseMiddleware } from "type-graphql";
 import { User } from "../entity/Users";
 import { Post } from "../entity/Posts";
 import { MyContext } from "../Types/Context";
 import { isAuth } from "../Middleware/Auth";
 import { AddPostInput } from "./InputTypes/PostInput";
 
-@Resolver()
+@Resolver(() => Post)
 export class PostResolver{
 
     // @Query(() => String, {nullable: true})
@@ -70,5 +70,10 @@ export class PostResolver{
             await Post.remove(user_id);
             return true;
         } else throw new Error("Post not found");
+    }
+
+    @FieldResolver(() => User)
+    async user(@Root() post: Post): Promise<User> {
+      return (await User.findOne(post.by))!;
     }
 }
