@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import { UserResolver } from './Resolver/UserResolver';
 import { createConnection } from 'typeorm';
 import { PostResolver } from './Resolver/Posts';
+import cors from "cors";
 
 const main = async () => {
 
@@ -21,9 +22,13 @@ const main = async () => {
     });
   
     const app = express();
-    app.use(cookieParser())
-    server.applyMiddleware({ app, cors: false });
+    app.use(cookieParser());
+    app.use(cors({
+      credentials: true,
+      origin:"http://localhost:3001"
+    }));
   
+    server.applyMiddleware({ app , cors: false});
     app.listen(4000, () => {
         console.log('Now browse to http://localhost:4000' + server.graphqlPath);
     });
